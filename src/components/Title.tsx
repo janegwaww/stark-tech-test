@@ -1,5 +1,12 @@
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
-export default function Title() {
-  return <Typography>Title</Typography>;
+type Props = { value: string };
+
+export default function Title({ value }: Props) {
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography>{value}</Typography>
+    </Box>
+  );
 }

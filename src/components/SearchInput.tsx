@@ -28,7 +28,8 @@ const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
   width: "100%",
 }));
 
-type Props = { onChange?: (v: any) => void };
+type Props = { onChange?: (v: string) => void };
+
 export default function SearchInput({ onChange }: Props) {
   return (
     <Search>
@@ -36,7 +37,7 @@ export default function SearchInput({ onChange }: Props) {
         size="small"
         freeSolo
         options={["The Godfather", "Pulp Fiction"]}
-        onChange={(e, v) => onChange?.(v)}
+        onChange={(e, v) => onChange?.(v as string)}
         renderInput={(params) => {
           const { InputLabelProps, InputProps, ...rest } = params;
           return (

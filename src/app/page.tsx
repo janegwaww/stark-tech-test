@@ -58,7 +58,7 @@ export default function Home() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Paper>
-                  <Title value={"三商寿（3867）"} />
+                  <Title value={"三商寿(3867)"} />
                 </Paper>
               </Grid>
               <Grid item xs={12}>

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -13,6 +13,7 @@ import Chart from "@/components/Chart";
 import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
 import { AllSeriesType } from "@mui/x-charts/models";
+import { getStockInfo } from "./api";
 
 const series = [
   {
@@ -36,8 +37,18 @@ const series = [
 ] as AllSeriesType[];
 
 export default function Home() {
-  const handleSearch = (value: string) => {
-    console.log(value);
+  const [stockInfo, setStockInfo] = useState<any[]>([]);
+
+  useEffect(() => {
+    getStockInfo({ dataset: "TaiwanStockInfo" }).then((data) => {
+      if (data) {
+        setStockInfo(data);
+      }
+    });
+  }, []);
+
+  const handleSearch = (value: any) => {
+    console.log(value?.stock_id);
   };
 
   return (
@@ -45,7 +56,7 @@ export default function Home() {
       <AppBar position="static">
         <Toolbar>
           <Container maxWidth="xs">
-            <SearchInput onChange={handleSearch} />
+            <SearchInput options={stockInfo} onChange={handleSearch} />
           </Container>
         </Toolbar>
       </AppBar>

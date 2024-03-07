@@ -9,7 +9,7 @@ export default function () {
   return (
     <Box sx={{ pb: 2 }}>
       <Box sx={{ p: 2 }}>
-        <Button variant="contained">每月营收</Button>
+        <Button variant="contained">详细数据</Button>
       </Box>
       <Box>
         <Table>

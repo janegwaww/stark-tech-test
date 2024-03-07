@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Anchor } from "antd";
-import { arr, arr2 } from "./listItems";
+import { rightItems, leftItems } from "./listItems";
 
 const AnchorTitle = ({
   subTitle,
@@ -24,12 +24,14 @@ const transterToAnchor = (arr: Record<string, string>[]) =>
   arr?.length
     ? arr.map((o) => ({
         ...o,
-        title: <AnchorTitle subTitle={o.key} title={o.title} />,
+        title: <AnchorTitle subTitle={o.subTitle} title={o.title} />,
       }))
     : [];
 
-const StyleAnchor1 = styled(Anchor)(({ theme, hasLine }) => ({
-  ".ant-anchor::before": hasLine ? {} : { height: "0 !important" },
+const StyleAnchor = styled(Anchor)(({ theme, hasLine }) => ({
+  ".ant-anchor::before": hasLine
+    ? { height: "100vh !important" }
+    : { height: "0 !important" },
 }));
 
 export default function MenuList() {
@@ -37,14 +39,20 @@ export default function MenuList() {
     <Box height={"100%"}>
       <Grid container spacing={1} height={"100%"}>
         <Grid item xs={6}>
-          <StyleAnchor1
+          <StyleAnchor
             replace
-            items={transterToAnchor(arr2)}
+            items={transterToAnchor(leftItems)}
             hasLine={false}
+            getCurrentAnchor={() => "#C"}
           />
         </Grid>
         <Grid item xs={6}>
-          <StyleAnchor1 replace items={transterToAnchor(arr)} hasLine={true} />
+          <StyleAnchor
+            replace
+            items={transterToAnchor(rightItems)}
+            hasLine={true}
+            getCurrentAnchor={() => "#part-1"}
+          />
         </Grid>
       </Grid>
     </Box>

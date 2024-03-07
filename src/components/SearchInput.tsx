@@ -28,16 +28,20 @@ const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
   width: "100%",
 }));
 
-type Props = { onChange?: (v: string) => void };
+type Props = { options: any[]; onChange?: (v: string) => void };
 
-export default function SearchInput({ onChange }: Props) {
+export default function SearchInput({ options, onChange }: Props) {
   return (
     <Search>
       <StyleAutocomplete
         size="small"
         freeSolo
-        options={["The Godfather", "Pulp Fiction"]}
+        options={options}
         onChange={(e, v) => onChange?.(v as string)}
+        getOptionLabel={(opt: any) =>
+          opt?.stock_name ? `${opt.stock_name}(${opt.stock_id})` : ""
+        }
+        getOptionKey={(opt: any) => (opt?.stock_id ? `${opt.stock_id}` : "")}
         renderInput={(params) => {
           const { InputLabelProps, InputProps, ...rest } = params;
           return (

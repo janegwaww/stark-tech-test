@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { BarPlot } from "@mui/x-charts/BarChart";
@@ -7,15 +7,27 @@ import { ChartContainer } from "@mui/x-charts/ChartContainer";
 import { AllSeriesType } from "@mui/x-charts/models";
 import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
 import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 type Props = { series: AllSeriesType[] };
 
 export default function Chart({ series }: Props) {
+  const [duration, setDuration] = useState("5");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setDuration(event.target.value as string);
+  };
+
   return (
     <Box sx={{ p: 2 }}>
       <Box display="flex" justifyContent={"space-between"}>
         <Button variant="contained">每月营收</Button>
-        <Button variant="contained">近五年</Button>
+        <Select size="small" value={duration} onChange={handleChange}>
+          <MenuItem value={3}>近三年</MenuItem>
+          <MenuItem value={5}>近五年</MenuItem>
+          <MenuItem value={8}>近八年</MenuItem>
+        </Select>
       </Box>
       <Box sx={{ pt: 2 }} />
       <Box>

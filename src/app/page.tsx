@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,7 +12,7 @@ import Chart from "@/components/Chart";
 import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
 import { AllSeriesType } from "@mui/x-charts/models";
-import { getStockInfo } from "./api";
+import { getStockInfo, getStockRevenue } from "./api";
 
 const series = [
   {
@@ -38,17 +37,45 @@ const series = [
 
 export default function Home() {
   const [stockInfo, setStockInfo] = useState<any[]>([]);
+  const [monthRevenue, setMonthRevenue] = useState<any[]>();
+  const [stockId, setStockId] = useState("");
+  const [stockName, setStockName] = useState("");
 
   useEffect(() => {
     getStockInfo({ dataset: "TaiwanStockInfo" }).then((data) => {
       if (data) {
         setStockInfo(data);
+        setStockId(getStockId(data));
+        setStockName(getStockName(data));
       }
     });
   }, []);
 
+  useEffect(() => {
+    if (stockId) {
+      getStockRevenue({
+        dataset: "TaiwanStockMonthRevenue",
+        start_date: "2021-01-01",
+        data_id: "1101",
+      }).then((data) => {
+        setMonthRevenue(data);
+      });
+    }
+  }, [stockId]);
+
+  const getStockId = (arr: any[]) => (arr[0] ? arr[0]["stock_id"] : "");
+
+  const getStockName = (arr: any[]) => {
+    if (arr[0]) {
+      const item = arr[0];
+      return `${item["stock_name"]}(${item["stock_id"]})`;
+    }
+    return "";
+  };
+
   const handleSearch = (value: any) => {
-    console.log(value?.stock_id);
+    setStockId(value?.stock_id);
+    setStockName(`${value?.stock_name}(${value?.stock_id})`);
   };
 
   return (
@@ -69,7 +96,7 @@ export default function Home() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Paper>
-                  <Title value={"三商寿(3867)"} />
+                  <Title value={stockName} />
                 </Paper>
               </Grid>
               <Grid item xs={12}>
@@ -79,7 +106,7 @@ export default function Home() {
               </Grid>
               <Grid item xs={12}>
                 <Paper>
-                  <TableInfo />
+                  <TableInfo revenueTable={monthRevenue} />
                 </Paper>
               </Grid>
             </Grid>

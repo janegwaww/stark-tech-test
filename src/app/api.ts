@@ -8,7 +8,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 
-type InfoProps = { dataset: string; data_id?: string };
+type InfoProps = { dataset: string; data_id?: string; start_date?: string };
 
 export const getStockInfo = async (params: InfoProps) => {
   try {
@@ -19,6 +19,17 @@ export const getStockInfo = async (params: InfoProps) => {
       R.prop("stock_id"),
       R.path(["data", "data"], response)
     );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getStockRevenue = async (params: InfoProps) => {
+  try {
+    const response = await axios.get("/api/v4/data", {
+      params: { ...params },
+    });
+    return R.path(["data", "data"], response);
   } catch (error) {
     console.error(error);
   }

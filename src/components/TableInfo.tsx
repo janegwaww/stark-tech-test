@@ -5,7 +5,9 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 
-export default function () {
+type Props = { revenueTable?: any[] };
+
+export default function ({ revenueTable }: Props) {
   return (
     <Box sx={{ pb: 2 }}>
       <Box sx={{ p: 2 }}>

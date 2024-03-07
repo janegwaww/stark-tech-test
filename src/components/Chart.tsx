@@ -9,6 +9,8 @@ import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
 import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { ChartsAxisHighlight } from "@mui/x-charts/ChartsAxisHighlight";
+import { ChartsTooltip } from "@mui/x-charts/ChartsTooltip";
 
 type Props = { series: AllSeriesType[] };
 
@@ -56,6 +58,8 @@ export default function Chart({ series }: Props) {
         >
           <BarPlot />
           <LinePlot />
+          <ChartsAxisHighlight x="line" />
+          <ChartsTooltip trigger="axis" />
           <ChartsXAxis label="Years" position="bottom" axisId="years" />
           <ChartsYAxis label="Results" position="left" axisId="eco" />
           <ChartsYAxis label="PIB" position="right" axisId="pib" />

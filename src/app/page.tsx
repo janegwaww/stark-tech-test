@@ -23,12 +23,6 @@ const series = [
     data: [2, 5, 3, 4, 1],
   },
   {
-    type: "bar",
-    stack: "",
-    yAxisKey: "eco",
-    data: [5, 6, 2, 8, 9],
-  },
-  {
     type: "line",
     yAxisKey: "pib",
     color: "red",

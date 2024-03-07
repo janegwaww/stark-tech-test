@@ -13,6 +13,7 @@ import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
 import { AllSeriesType } from "@mui/x-charts/models";
 import { getStockInfo, getStockRevenue } from "./api";
+import { getStockId, getStockName } from "./utils";
 
 const series = [
   {
@@ -62,16 +63,6 @@ export default function Home() {
       });
     }
   }, [stockId]);
-
-  const getStockId = (arr: any[]) => (arr[0] ? arr[0]["stock_id"] : "");
-
-  const getStockName = (arr: any[]) => {
-    if (arr[0]) {
-      const item = arr[0];
-      return `${item["stock_name"]}(${item["stock_id"]})`;
-    }
-    return "";
-  };
 
   const handleSearch = (value: any) => {
     setStockId(value?.stock_id);

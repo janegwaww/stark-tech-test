@@ -13,7 +13,7 @@ import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
 import { AllSeriesType } from "@mui/x-charts/models";
 import { getStockInfo, getStockRevenue } from "./api";
-import { getStockId, getStockName } from "./utils";
+import { getStockId, getStockName, addRevenueBefore } from "./utils";
 
 const series = [
   {
@@ -91,7 +91,7 @@ export default function Home() {
               </Grid>
               <Grid item xs={12}>
                 <Paper>
-                  <TableInfo revenueTable={monthRevenue} />
+                  <TableInfo revenueTable={addRevenueBefore(monthRevenue)} />
                 </Paper>
               </Grid>
             </Grid>

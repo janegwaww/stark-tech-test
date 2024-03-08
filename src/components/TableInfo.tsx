@@ -4,6 +4,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
+import { toYearMonth, toMonthRevenue, toRevenueRate } from "../app/utils";
 
 const StyleTableCell = styled(TableCell)(({ theme }) => ({
   borderRightWidth: 1,
@@ -28,11 +29,7 @@ export default function ({ revenueTable }: Props) {
                   <span style={{ fontWeight: "bold" }}>年度月份</span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
-                  <StyleTableCell>{`${o.revenue_year}${
-                    o.revenue_month <= 9
-                      ? "0" + o.revenue_month
-                      : o.revenue_month
-                  }`}</StyleTableCell>
+                  <StyleTableCell>{toYearMonth(o)}</StyleTableCell>
                 ))}
               </TableRow>
               <TableRow>
@@ -40,9 +37,7 @@ export default function ({ revenueTable }: Props) {
                   <span style={{ fontWeight: "bold" }}>每月营收</span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
-                  <StyleTableCell>{`${o.revenue
-                    .toFixed(1)
-                    .replace(/\d(?=(\d{3})+\.)/g, "$&,")}`}</StyleTableCell>
+                  <StyleTableCell>{toMonthRevenue(o)}</StyleTableCell>
                 ))}
               </TableRow>
               <TableRow sx={{ backgroundColor: "azure" }}>
@@ -50,7 +45,7 @@ export default function ({ revenueTable }: Props) {
                   <span style={{ fontWeight: "bold" }}>单月营收年增率(%)</span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
-                  <StyleTableCell>{`${o.revenue_year}${o.revenue_month}`}</StyleTableCell>
+                  <StyleTableCell>{toRevenueRate(o)}</StyleTableCell>
                 ))}
               </TableRow>
             </TableBody>

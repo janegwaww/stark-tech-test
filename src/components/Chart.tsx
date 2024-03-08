@@ -12,13 +12,15 @@ import MenuItem from "@mui/material/MenuItem";
 import { ChartsAxisHighlight } from "@mui/x-charts/ChartsAxisHighlight";
 import { ChartsTooltip } from "@mui/x-charts/ChartsTooltip";
 
-type Props = { series: AllSeriesType[] };
+type Props = { series: AllSeriesType[]; handleDur?: (v: string) => void };
 
-export default function Chart({ series }: Props) {
+export default function Chart({ series, handleDur }: Props) {
   const [duration, setDuration] = useState("5");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setDuration(event.target.value as string);
+    const dur = event.target.value as string;
+    setDuration(dur);
+    handleDur?.(dur);
   };
 
   return (

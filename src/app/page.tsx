@@ -13,7 +13,12 @@ import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
 import { AllSeriesType } from "@mui/x-charts/models";
 import { getStockInfo, getStockRevenue } from "./api";
-import { getStockId, getStockName, addRevenueBefore } from "./utils";
+import {
+  getStockId,
+  getStockName,
+  addRevenueBefore,
+  getYearAgo,
+} from "./utils";
 
 const series = [
   {
@@ -35,6 +40,7 @@ export default function Home() {
   const [monthRevenue, setMonthRevenue] = useState<any[]>();
   const [stockId, setStockId] = useState("");
   const [stockName, setStockName] = useState("");
+  const [startDate, setStartDate] = useState(getYearAgo());
 
   useEffect(() => {
     getStockInfo({ dataset: "TaiwanStockInfo" }).then((data) => {
@@ -48,15 +54,23 @@ export default function Home() {
 
   useEffect(() => {
     if (stockId) {
-      getStockRevenue({
-        dataset: "TaiwanStockMonthRevenue",
-        start_date: "2021-01-01",
-        data_id: "1101",
-      }).then((data) => {
-        setMonthRevenue(data);
-      });
+      queryStockRevenue();
     }
   }, [stockId]);
+
+  useEffect(() => {
+    queryStockRevenue();
+  }, [startDate]);
+
+  const queryStockRevenue = () => {
+    getStockRevenue({
+      dataset: "TaiwanStockMonthRevenue",
+      start_date: startDate,
+      data_id: "1101",
+    }).then((data) => {
+      setMonthRevenue(data);
+    });
+  };
 
   const handleSearch = (value: any) => {
     setStockId(value?.stock_id);
@@ -86,7 +100,10 @@ export default function Home() {
               </Grid>
               <Grid item xs={12}>
                 <Paper>
-                  <Chart series={series} />
+                  <Chart
+                    series={series}
+                    handleDur={(d) => setStartDate(getYearAgo(d))}
+                  />
                 </Paper>
               </Grid>
               <Grid item xs={12}>

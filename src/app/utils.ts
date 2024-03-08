@@ -59,3 +59,12 @@ export const addRevenueBefore = (data?: any[]) => {
   }
   return [];
 };
+
+export const getYearAgo = (count?: number | string) => {
+  const d = new Date();
+  const countDown = Number(count);
+  if (count) {
+    return new Date(d.setFullYear(d.getFullYear() - countDown)).getDate() + "";
+  }
+  return new Date(d.setFullYear(d.getFullYear() - 5)).getDate() + "";
+};

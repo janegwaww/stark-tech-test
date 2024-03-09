@@ -7,6 +7,7 @@ axios.defaults.baseURL = "https://api.finmindtrade.com";
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
+axios.defaults.withCredentials = false;
 
 type InfoProps = { dataset: string; data_id?: string; start_date?: string };
 
@@ -14,7 +15,7 @@ type InfoProps = { dataset: string; data_id?: string; start_date?: string };
 export const getStockInfo = async (params: InfoProps) => {
   try {
     const response = await axios.get("/api/v4/data", {
-      params: { ...params },
+      params: { ...params, token: AUTH_TOKEN },
     });
     return R.uniqBy<any, any>(
       R.prop("stock_id"),
@@ -29,7 +30,7 @@ export const getStockInfo = async (params: InfoProps) => {
 export const getStockRevenue = async (params: InfoProps) => {
   try {
     const response = await axios.get("/api/v4/data", {
-      params: { ...params },
+      params: { ...params, token: AUTH_TOKEN },
     });
     return R.path(["data", "data"], response);
   } catch (error) {

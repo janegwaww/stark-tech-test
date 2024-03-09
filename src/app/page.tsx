@@ -38,6 +38,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // 选择不同股票或不同周期则重新获取数据
     if (stockId) {
       getStockRevenue({
         dataset: "TaiwanStockMonthRevenue",

@@ -10,6 +10,7 @@ axios.defaults.headers.post["Content-Type"] =
 
 type InfoProps = { dataset: string; data_id?: string; start_date?: string };
 
+// 从TaiwanStockInfo接口获取列表，并去除重复项
 export const getStockInfo = async (params: InfoProps) => {
   try {
     const response = await axios.get("/api/v4/data", {
@@ -24,6 +25,7 @@ export const getStockInfo = async (params: InfoProps) => {
   }
 };
 
+// 获取TaiwanStockMonthRevenue
 export const getStockRevenue = async (params: InfoProps) => {
   try {
     const response = await axios.get("/api/v4/data", {

@@ -1,7 +1,9 @@
 import * as R from "ramda";
 
+// get first stock_id
 export const getStockId = (arr: any[]) => (arr[0] ? arr[0]["stock_id"] : "");
 
+// to 元大台灣50(0050) format
 export const getStockName = (arr: any[]) => {
   if (arr[0]) {
     const item = arr[0];
@@ -10,6 +12,7 @@ export const getStockName = (arr: any[]) => {
   return "";
 };
 
+// to 201202 format
 export const toYearMonth = (revenue: any) => {
   if (revenue) {
     const { revenue_year, revenue_month } = revenue;
@@ -20,6 +23,7 @@ export const toYearMonth = (revenue: any) => {
   return "000000";
 };
 
+// to 000,000.00 format
 export const toMonthRevenue = (revenueInfo: any) => {
   if (revenueInfo) {
     const { revenue } = revenueInfo;
@@ -28,6 +32,7 @@ export const toMonthRevenue = (revenueInfo: any) => {
   return "0.0";
 };
 
+// 单月营收增加率：(单月营收总和 / 去年同月营收总收 - 1) * 100%
 export const toRevenueRate = (revenueInfo: any) => {
   if (revenueInfo) {
     const { revenue, revenueBefore } = revenueInfo;
@@ -38,6 +43,7 @@ export const toRevenueRate = (revenueInfo: any) => {
   return null;
 };
 
+// add 'revenueBefore' property to all object in array.
 export const addRevenueBefore = (data?: any[]) => {
   if (data?.length) {
     return R.map(
@@ -45,7 +51,7 @@ export const addRevenueBefore = (data?: any[]) => {
         R.assoc(
           "revenueBefore",
           R.prop(
-            "revenue",
+            "revenue" as never,
             R.find(
               R.whereEq({
                 revenue_year: o.revenue_year - 1,
@@ -62,6 +68,7 @@ export const addRevenueBefore = (data?: any[]) => {
   return [];
 };
 
+// get date {count} years ago.
 export const getYearAgo = (count?: number | string) => {
   const d = new Date();
   const countDown = Number(count);
@@ -74,6 +81,7 @@ export const getYearAgo = (count?: number | string) => {
   return ago(5);
 };
 
+// add 'yearMonth' 'growRate' properties to all object in array.
 export const addRateRevenue = (data: any[]) => {
   if (data?.length) {
     return R.pipe(

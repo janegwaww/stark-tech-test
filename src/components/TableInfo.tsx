@@ -14,6 +14,7 @@ const StyleTableCell = styled(TableCell)(({ theme }) => ({
 
 type Props = { revenueTable?: any[] };
 
+// 页面表格组件
 export default function ({ revenueTable }: Props) {
   return (
     <Box>

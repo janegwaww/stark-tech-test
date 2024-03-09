@@ -30,6 +30,7 @@ const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
 
 type Props = { options: any[]; onChange?: (v: string) => void };
 
+// 页面最上方搜索框组件
 export default function SearchInput({ options, onChange }: Props) {
   return (
     <Search>

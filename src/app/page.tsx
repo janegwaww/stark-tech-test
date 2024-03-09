@@ -11,33 +11,18 @@ import Title from "@/components/Title";
 import Chart from "@/components/Chart";
 import TableInfo from "@/components/TableInfo";
 import SearchInput from "@/components/SearchInput";
-import { AllSeriesType } from "@mui/x-charts/models";
 import { getStockInfo, getStockRevenue } from "./api";
 import {
   getStockId,
   getStockName,
   addRevenueBefore,
   getYearAgo,
+  addRateRevenue,
 } from "./utils";
-
-const series = [
-  {
-    type: "bar",
-    stack: "",
-    yAxisKey: "eco",
-    data: [2, 5, 3, 4, 1],
-  },
-  {
-    type: "line",
-    yAxisKey: "pib",
-    color: "red",
-    data: [1000, 1500, 3000, 5000, 10000],
-  },
-] as AllSeriesType[];
 
 export default function Home() {
   const [stockInfo, setStockInfo] = useState<any[]>([]);
-  const [monthRevenue, setMonthRevenue] = useState<any[]>();
+  const [monthRevenue, setMonthRevenue] = useState<any[]>([]);
   const [stockId, setStockId] = useState("");
   const [stockName, setStockName] = useState("");
   const [startDate, setStartDate] = useState(getYearAgo());
@@ -54,23 +39,15 @@ export default function Home() {
 
   useEffect(() => {
     if (stockId) {
-      queryStockRevenue();
+      getStockRevenue({
+        dataset: "TaiwanStockMonthRevenue",
+        start_date: startDate,
+        data_id: "1101",
+      }).then((data) => {
+        setMonthRevenue(addRevenueBefore(data));
+      });
     }
-  }, [stockId]);
-
-  useEffect(() => {
-    queryStockRevenue();
-  }, [startDate]);
-
-  const queryStockRevenue = () => {
-    getStockRevenue({
-      dataset: "TaiwanStockMonthRevenue",
-      start_date: startDate,
-      data_id: "1101",
-    }).then((data) => {
-      setMonthRevenue(data);
-    });
-  };
+  }, [stockId, startDate]);
 
   const handleSearch = (value: any) => {
     setStockId(value?.stock_id);
@@ -100,15 +77,17 @@ export default function Home() {
               </Grid>
               <Grid item xs={12}>
                 <Paper>
-                  <Chart
-                    series={series}
-                    handleDur={(d) => setStartDate(getYearAgo(d))}
-                  />
+                  {monthRevenue?.length ? (
+                    <Chart
+                      revenueTable={addRateRevenue(monthRevenue)}
+                      handleDur={(d) => setStartDate(getYearAgo(d))}
+                    />
+                  ) : null}
                 </Paper>
               </Grid>
               <Grid item xs={12}>
                 <Paper>
-                  <TableInfo revenueTable={addRevenueBefore(monthRevenue)} />
+                  <TableInfo revenueTable={monthRevenue} />
                 </Paper>
               </Grid>
             </Grid>

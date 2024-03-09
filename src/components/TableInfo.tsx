@@ -26,7 +26,9 @@ export default function ({ revenueTable }: Props) {
             <TableBody>
               <TableRow sx={{ backgroundColor: "azure" }}>
                 <StyleTableCell>
-                  <span style={{ fontWeight: "bold" }}>年度月份</span>
+                  <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                    年度月份
+                  </span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
                   <StyleTableCell>{toYearMonth(o)}</StyleTableCell>
@@ -34,7 +36,9 @@ export default function ({ revenueTable }: Props) {
               </TableRow>
               <TableRow>
                 <StyleTableCell>
-                  <span style={{ fontWeight: "bold" }}>每月营收</span>
+                  <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                    每月营收
+                  </span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
                   <StyleTableCell>{toMonthRevenue(o)}</StyleTableCell>
@@ -42,7 +46,9 @@ export default function ({ revenueTable }: Props) {
               </TableRow>
               <TableRow sx={{ backgroundColor: "azure" }}>
                 <StyleTableCell>
-                  <span style={{ fontWeight: "bold" }}>单月营收年增率(%)</span>
+                  <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                    单月营收年增率(%)
+                  </span>
                 </StyleTableCell>
                 {revenueTable?.map((o) => (
                   <StyleTableCell>{toRevenueRate(o)}</StyleTableCell>

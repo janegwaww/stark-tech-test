@@ -31,9 +31,11 @@ export const toMonthRevenue = (revenueInfo: any) => {
 export const toRevenueRate = (revenueInfo: any) => {
   if (revenueInfo) {
     const { revenue, revenueBefore } = revenueInfo;
-    return (revenue / revenueBefore - 1) * 100;
+    return revenueBefore
+      ? Number(((revenue / revenueBefore - 1) * 100).toFixed(2))
+      : null;
   }
-  return 0;
+  return null;
 };
 
 export const addRevenueBefore = (data?: any[]) => {
@@ -63,8 +65,21 @@ export const addRevenueBefore = (data?: any[]) => {
 export const getYearAgo = (count?: number | string) => {
   const d = new Date();
   const countDown = Number(count);
+  const ago = (c: number) =>
+    new Date(d.setFullYear(d.getFullYear() - c)).toISOString().split("T")[0];
+
   if (count) {
-    return new Date(d.setFullYear(d.getFullYear() - countDown)).getDate() + "";
+    return ago(countDown);
   }
-  return new Date(d.setFullYear(d.getFullYear() - 5)).getDate() + "";
+  return ago(5);
+};
+
+export const addRateRevenue = (data: any[]) => {
+  if (data?.length) {
+    return R.pipe(
+      R.map((o) => R.assoc("yearMonth", toYearMonth(o))(o)),
+      R.map((o) => R.assoc("growRate", toRevenueRate(o))(o))
+    )(data);
+  }
+  return [];
 };

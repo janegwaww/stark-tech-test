@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { BarPlot } from "@mui/x-charts/BarChart";
-import { LinePlot } from "@mui/x-charts/LineChart";
-import { ChartContainer } from "@mui/x-charts/ChartContainer";
+import { LinePlot, MarkPlot } from "@mui/x-charts/LineChart";
+import { ResponsiveChartContainer } from "@mui/x-charts/ResponsiveChartContainer";
 import { AllSeriesType } from "@mui/x-charts/models";
 import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
 import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
@@ -12,10 +12,26 @@ import MenuItem from "@mui/material/MenuItem";
 import { ChartsAxisHighlight } from "@mui/x-charts/ChartsAxisHighlight";
 import { ChartsTooltip } from "@mui/x-charts/ChartsTooltip";
 
-type Props = { series: AllSeriesType[]; handleDur?: (v: string) => void };
+type Props = { revenueTable: any[]; handleDur?: (v: string) => void };
 
-export default function Chart({ series, handleDur }: Props) {
+export default function Chart({ revenueTable, handleDur }: Props) {
   const [duration, setDuration] = useState("5");
+  console.log(revenueTable);
+  const series = [
+    {
+      type: "bar",
+      yAxisKey: "revenue",
+      dataKey: "revenue",
+      label: "单月营收",
+    },
+    {
+      type: "line",
+      yAxisKey: "rate",
+      color: "red",
+      dataKey: "growRate",
+      label: "单月营收年增长率",
+    },
+  ] as AllSeriesType[];
 
   const handleChange = (event: SelectChangeEvent) => {
     const dur = event.target.value as string;
@@ -35,37 +51,49 @@ export default function Chart({ series, handleDur }: Props) {
       </Box>
       <Box sx={{ pt: 2 }} />
       <Box>
-        <ChartContainer
+        <ResponsiveChartContainer
+          dataset={revenueTable}
           series={series}
           width={500}
           height={400}
           xAxis={[
             {
               id: "years",
-              data: [2010, 2011, 2012, 2013, 2014],
+              dataKey: "yearMonth",
               scaleType: "band",
               valueFormatter: (value) => value.toString(),
             },
           ]}
           yAxis={[
             {
-              id: "eco",
+              id: "revenue",
               scaleType: "linear",
+              dataKey: "revenue",
             },
             {
-              id: "pib",
-              scaleType: "log",
+              id: "rate",
+              scaleType: "linear",
+              dataKey: "rate",
             },
           ]}
         >
           <BarPlot />
           <LinePlot />
+          <MarkPlot />
           <ChartsAxisHighlight x="line" />
           <ChartsTooltip trigger="axis" />
           <ChartsXAxis label="Years" position="bottom" axisId="years" />
-          <ChartsYAxis label="Results" position="left" axisId="eco" />
-          <ChartsYAxis label="PIB" position="right" axisId="pib" />
-        </ChartContainer>
+          <ChartsYAxis
+            label="单月营收(千元)"
+            position="left"
+            axisId="revenue"
+          />
+          <ChartsYAxis
+            label="单月营收年增长率(%)"
+            position="right"
+            axisId="rate"
+          />
+        </ResponsiveChartContainer>
       </Box>
     </Box>
   );

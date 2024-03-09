@@ -15,7 +15,7 @@ const StyleTableCell = styled(TableCell)(({ theme }) => ({
 type Props = { revenueTable?: any[] };
 
 // 页面表格组件
-export default function ({ revenueTable }: Props) {
+export default function TableInfo({ revenueTable }: Props) {
   return (
     <Box>
       <Box sx={{ p: 2 }}>
@@ -31,8 +31,8 @@ export default function ({ revenueTable }: Props) {
                     年度月份
                   </span>
                 </StyleTableCell>
-                {revenueTable?.map((o) => (
-                  <StyleTableCell>{toYearMonth(o)}</StyleTableCell>
+                {revenueTable?.map((o, i) => (
+                  <StyleTableCell key={i}>{toYearMonth(o)}</StyleTableCell>
                 ))}
               </TableRow>
               <TableRow>
@@ -41,8 +41,8 @@ export default function ({ revenueTable }: Props) {
                     每月营收
                   </span>
                 </StyleTableCell>
-                {revenueTable?.map((o) => (
-                  <StyleTableCell>{toMonthRevenue(o)}</StyleTableCell>
+                {revenueTable?.map((o, i) => (
+                  <StyleTableCell key={i}>{toMonthRevenue(o)}</StyleTableCell>
                 ))}
               </TableRow>
               <TableRow sx={{ backgroundColor: "azure" }}>
@@ -51,8 +51,8 @@ export default function ({ revenueTable }: Props) {
                     单月营收年增率(%)
                   </span>
                 </StyleTableCell>
-                {revenueTable?.map((o) => (
-                  <StyleTableCell>{toRevenueRate(o)}</StyleTableCell>
+                {revenueTable?.map((o, i) => (
+                  <StyleTableCell key={i}>{toRevenueRate(o)}</StyleTableCell>
                 ))}
               </TableRow>
             </TableBody>

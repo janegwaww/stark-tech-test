@@ -1,95 +1,100 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useEffect, useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import MenuList from "@/components/MenuList";
+import Title from "@/components/Title";
+import Chart from "@/components/Chart";
+import TableInfo from "@/components/TableInfo";
+import SearchInput from "@/components/SearchInput";
+import { getStockInfo, getStockRevenue } from "./api";
+import {
+  getStockId,
+  getStockName,
+  addRevenueBefore,
+  getYearAgo,
+  addRateRevenue,
+} from "./utils";
 
 export default function Home() {
+  const [stockInfo, setStockInfo] = useState<any[]>([]);
+  const [monthRevenue, setMonthRevenue] = useState<any[]>([]);
+  const [stockId, setStockId] = useState("");
+  const [stockName, setStockName] = useState("");
+  const [startDate, setStartDate] = useState(getYearAgo());
+
+  useEffect(() => {
+    getStockInfo({ dataset: "TaiwanStockInfo" }).then((data) => {
+      if (data) {
+        setStockInfo(data);
+        setStockId(getStockId(data));
+        setStockName(getStockName(data));
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    // 选择不同股票或不同周期则重新获取数据
+    if (stockId) {
+      getStockRevenue({
+        dataset: "TaiwanStockMonthRevenue",
+        start_date: startDate,
+        data_id: "1101",
+      }).then((data) => {
+        setMonthRevenue(addRevenueBefore(data));
+      });
+    }
+  }, [stockId, startDate]);
+
+  const handleSearch = (value: any) => {
+    setStockId(value?.stock_id);
+    setStockName(`${value?.stock_name}(${value?.stock_id})`);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Container maxWidth="xs">
+            <SearchInput options={stockInfo} onChange={handleSearch} />
+          </Container>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="md">
+        <Grid container spacing={3} sx={{ p: 2 }}>
+          <Grid item xs={4}>
+            <MenuList />
+          </Grid>
+          <Grid item xs={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Paper>
+                  <Title value={stockName} />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper>
+                  {monthRevenue?.length ? (
+                    <Chart
+                      revenueTable={addRateRevenue(monthRevenue)}
+                      handleDur={(d) => setStartDate(getYearAgo(d))}
+                    />
+                  ) : null}
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper>
+                  <TableInfo revenueTable={monthRevenue} />
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 }

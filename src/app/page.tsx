@@ -43,7 +43,7 @@ export default function Home() {
       getStockRevenue({
         dataset: "TaiwanStockMonthRevenue",
         start_date: startDate,
-        data_id: "1101",
+        data_id: stockId,
       }).then((data) => {
         setMonthRevenue(addRevenueBefore(data));
       });

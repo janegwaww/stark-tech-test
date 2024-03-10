@@ -17,7 +17,7 @@ type Props = { revenueTable: any[]; handleDur?: (v: string) => void };
 // 页面图表组件
 export default function Chart({ revenueTable, handleDur }: Props) {
   const [duration, setDuration] = useState("5");
-  console.log(revenueTable);
+
   const series = [
     {
       type: "bar",
